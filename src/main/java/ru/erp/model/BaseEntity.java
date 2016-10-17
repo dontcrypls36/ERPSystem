@@ -1,7 +1,15 @@
 package ru.erp.model;
 
-public class BaseEntity {
+import javax.persistence.*;
 
+@MappedSuperclass
+@Access(AccessType.FIELD)
+public class BaseEntity {
+    public static final int START_SEQ = 100000;
+
+    @Id
+    @SequenceGenerator(name = "global_seq", sequenceName = "global_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
 
     public int getId() {

@@ -1,7 +1,12 @@
 package ru.erp.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.Date;
 
+
+@Entity
+@Table(name="tasks")
 public class Task extends BaseEntity{
 
         private String name;
