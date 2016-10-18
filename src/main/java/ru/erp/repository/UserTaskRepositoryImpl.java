@@ -1,10 +1,12 @@
 package ru.erp.repository;
 
+import org.springframework.stereotype.Repository;
 import ru.erp.model.Task;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+@Repository
 public class UserTaskRepositoryImpl implements UserTaskRepository{
 
     public Task save(Task t, int executorId) {
