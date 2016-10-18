@@ -13,6 +13,7 @@ CREATE TABLE users
   email      VARCHAR NOT NULL,
   department      VARCHAR NOT NULL,
   position      VARCHAR NOT NULL,
+  role   VARCHAR NOT NULL,
   login      VARCHAR NOT NULL,
   password   VARCHAR NOT NULL,
   registered TIMESTAMP DEFAULT now()

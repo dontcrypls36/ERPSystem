@@ -14,4 +14,6 @@ public interface UserRepository {
 
     Collection<User> getAll();
 
+    Collection<User> getByDepartment(String department);
+
 }

@@ -11,6 +11,8 @@
         <property name="connection.password">.Warrior1988</property>
         <property name="hbm2ddl.auto">create</property>
 
-        <mapping resource="hm.xml"/>
+        <mapping class="ru.erp.model.Task"/>
+        <mapping class="ru.erp.model.User"/>
+
     </session-factory>
 </hibernate-configuration>

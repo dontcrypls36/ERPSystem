@@ -2,5 +2,5 @@ package ru.erp.model;
 
 public enum Role {
     USER,
-    ADMIN;
+    MANAGER;
 }

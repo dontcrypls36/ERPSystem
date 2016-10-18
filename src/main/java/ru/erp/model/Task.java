@@ -1,45 +1,46 @@
 package ru.erp.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.persistence.*;
 import java.util.Date;
 
 
 @Entity
 @Table(name="tasks")
-public class Task extends BaseEntity{
+public class Task extends NamedEntity{
 
-        private String name;
-
+        @Column(name = "description")
         private String description;
 
+        @Column(name = "complete")
+        @NotEmpty
         private boolean complete;
 
+        @ManyToOne
+        @JoinColumn(name = "executor_id", nullable = false)
         private User executor;
 
+        @ManyToOne
+        @JoinColumn(name= "owner_id", nullable= false)
         private User owner;
 
+        @Column(name = "date_time_create", nullable = false)
+        @NotEmpty
         private Date createDate;
 
+        @Column(name = "date_time_complete", nullable = false)
+        @NotEmpty
         private Date completeDate;
 
         public Task(int id, String name, String description, User owner, User executor) {
-            super(id);
-            this.name = name;
+            super(id, name);
             this.description = description;
             this.owner = owner;
             this.createDate = new Date();
             this.executor = executor;
             this.complete = false;
         }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public String getDescription() {
         return description;
