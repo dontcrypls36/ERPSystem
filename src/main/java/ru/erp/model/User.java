@@ -14,9 +14,9 @@ import java.util.Set;
 @NamedQueries({
         @NamedQuery(name = User.DELETE,
                 query = "DELETE FROM User u WHERE u.id=:id"),
-        @NamedQuery(name = User.ALL_SORTED,
+        @NamedQuery(name = User.GET_ALL_SORTED,
                 query = "SELECT u FROM User u ORDER BY u.surname ASC"),
-        @NamedQuery(name = User.ALL_BY_DEPARTMENT,
+        @NamedQuery(name = User.GET_ALL_BY_DEPARTMENT,
                 query = "SELECT u from User u WHERE u.department=:department ORDER BY u.surname asc")
 })
 
@@ -25,8 +25,8 @@ import java.util.Set;
 public class User extends NamedEntity {
 
     public static final String DELETE = "User.delete";
-    public static final String ALL_SORTED = "User.getAll";
-    public static final String ALL_BY_DEPARTMENT = "User.byDepartment";
+    public static final String GET_ALL_SORTED = "User.getAll";
+    public static final String GET_ALL_BY_DEPARTMENT = "User.getByDepartment";
 
     @Column(name = "surname")
     @NotBlank

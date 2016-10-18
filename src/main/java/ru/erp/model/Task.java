@@ -6,41 +6,82 @@ import javax.persistence.*;
 import java.util.Date;
 
 
+@NamedQueries({
+        @NamedQuery(name = Task.EXECUTOR_GET_ALL,
+                query = "select t from Task t where t.executor.id=:id"),
+        @NamedQuery(name = Task.EXECUTOR_GET_BY_STATUS,
+                query = "select t from Task t where t.executor.id=:id and t.complete=:complete"),
+        @NamedQuery(name = Task.EXECUTOR_GET_COMPLETE_BETWEEN,
+                query = "select t from Task t where t.executor.id=:id and t.complete=true " +
+                        "and t.completeDate between :startDate and :endDate order by t.createDate asc"),
+        @NamedQuery(name = Task.EXECUTOR_GET_CREATE_BETWEEN,
+                query = "select t from Task t where t.executor.id=:id " +
+                        "and t.createDate between :startDate and :endDate order by t.createDate asc"),
+        @NamedQuery(name = Task.OWNER_DELETE,
+                query = "delete from Task t where t.owner.id=:ownerId and t.id=:taskId"),
+        @NamedQuery(name = Task.OWNER_GET_ALL,
+                query = "select t from Task t where t.owner.id=:id"),
+        @NamedQuery(name = Task.OWNER_GET_BY_STATUS,
+                query = "select t from Task t where t.owner.id=:id and t.complete=:complete"),
+        @NamedQuery(name = Task.OWNER_GET_COMPLETE_BETWEEN,
+                query = "select t from Task t where t.owner.id=:id and t.complete=true " +
+                        "and t.completeDate between :startDate and :endDate order by t.createDate asc"),
+        @NamedQuery(name = Task.OWNER_GET_CREATE_BETWEEN,
+                query = "select t from Task t where t.owner.id=:id " +
+                        "and t.createDate between :startDate and :endDate order by t.createDate asc")
+})
+
 @Entity
-@Table(name="tasks")
-public class Task extends NamedEntity{
+@Table(name = "tasks")
+public class Task extends NamedEntity {
 
-        @Column(name = "description")
-        private String description;
 
-        @Column(name = "complete")
-        @NotEmpty
-        private boolean complete;
+    public static final String EXECUTOR_GET_ALL = "Task.executorGetAll";
+    public static final String EXECUTOR_GET_BY_STATUS = "Task.executorGetByStatus";
+    public static final String EXECUTOR_GET_COMPLETE_BETWEEN = "Task.executorCompleteBetween";
+    public static final String EXECUTOR_GET_CREATE_BETWEEN = "Task.executorCreateBetween";
 
-        @ManyToOne
-        @JoinColumn(name = "executor_id", nullable = false)
-        private User executor;
+    public static final String OWNER_DELETE = "Task.ownerDelete";
+    public static final String OWNER_GET_ALL = "Task.ownerGetAll";
+    public static final String OWNER_GET_BY_STATUS = "Task.ownerGetByUser";
+    public static final String OWNER_GET_COMPLETE_BETWEEN = "Task.ownerCompleteBetween";
+    public static final String OWNER_GET_CREATE_BETWEEN = "Task.ownerCreateBetween";
 
-        @ManyToOne
-        @JoinColumn(name= "owner_id", nullable= false)
-        private User owner;
 
-        @Column(name = "date_time_create", nullable = false)
-        @NotEmpty
-        private Date createDate;
+    @Column(name = "description")
+    private String description;
 
-        @Column(name = "date_time_complete", nullable = false)
-        @NotEmpty
-        private Date completeDate;
+    @Column(name = "complete")
+    @NotEmpty
+    private boolean complete;
 
-        public Task(int id, String name, String description, User owner, User executor) {
-            super(id, name);
-            this.description = description;
-            this.owner = owner;
-            this.createDate = new Date();
-            this.executor = executor;
-            this.complete = false;
-        }
+    @ManyToOne
+    @JoinColumn(name = "executor_id", nullable = false)
+    private User executor;
+
+    @ManyToOne
+    @JoinColumn(name = "owner_id", nullable = false)
+    private User owner;
+
+    @Column(name = "date_time_create", nullable = false)
+    @NotEmpty
+    private Date createDate;
+
+    @Column(name = "date_time_complete", nullable = false)
+    @NotEmpty
+    private Date completeDate;
+
+    public Task() {
+    }
+
+    public Task(int id, String name, String description, User owner, User executor) {
+        super(id, name);
+        this.description = description;
+        this.owner = owner;
+        this.createDate = new Date();
+        this.executor = executor;
+        this.complete = false;
+    }
 
     public String getDescription() {
         return description;

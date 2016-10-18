@@ -9,7 +9,7 @@ public interface UserTaskRepository {
 
     Task save(Task t, int executorId);
 
-    boolean delete(Task t, int executorId);
+    //boolean delete(Task t, int executorId);
 
     Task get(int id, int executorId);
 
