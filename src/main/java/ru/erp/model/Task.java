@@ -34,7 +34,10 @@ import java.time.LocalDateTime;
                         "and t.createDate between :startDate and :endDate order by t.createDate asc"),
         @NamedQuery(name = Task.OWNER_GET_ALL_USER_TASKS,
                 query = "select t from Task t where t.owner.id=:ownerId " +
-                        "and t.executor.id=:executorId")
+                        "and t.executor.id=:executorId"),
+        @NamedQuery(name = Task.EXECUTOR_UPDATE, query = "update Task t set t.complete=:complete" +
+                " , t.completeDate=:completeDate, t.description=:description" +
+                " where t.id=:taskId and t.executor.id=:executorId")
 })
 
 @Entity
@@ -46,6 +49,7 @@ public class Task extends NamedEntity {
     public static final String EXECUTOR_GET_BY_STATUS = "Task.executorGetByStatus";
     public static final String EXECUTOR_GET_COMPLETE_BETWEEN = "Task.executorCompleteBetween";
     public static final String EXECUTOR_GET_CREATE_BETWEEN = "Task.executorCreateBetween";
+    public static final String EXECUTOR_UPDATE = "Task.executorUpdate";
 
     public static final String OWNER_GET = "Task.ownerGet";
     public static final String OWNER_DELETE = "Task.ownerDelete";

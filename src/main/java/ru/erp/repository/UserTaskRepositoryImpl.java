@@ -68,14 +68,15 @@ public class UserTaskRepositoryImpl implements UserTaskRepository{
         return tasks;
     }
 
-    public void update(Task t) {
+    public Task update(Task t, int executorId) {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Task task = session.get(Task.class, t.getId());
-        task.setComplete(t.isComplete());
-        task.setCompleteDate(t.getCompleteDate());
-        task.setDescription(t.getDescription());
+        boolean result = session.getNamedQuery(Task.EXECUTOR_UPDATE)
+                .setInteger("taskId", t.getId())
+                .setInteger("executorId", executorId)
+                .executeUpdate() > 0;
         session.getTransaction().commit();
         session.close();
+        return result? t : null;
     }
 }

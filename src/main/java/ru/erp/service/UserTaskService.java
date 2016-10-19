@@ -8,7 +8,7 @@ import java.util.Collection;
 public interface UserTaskService
 {
 
-    void update(Task t);
+    Task update(Task t, int executorId);
 
     Task get(int id, int executorId);
 
