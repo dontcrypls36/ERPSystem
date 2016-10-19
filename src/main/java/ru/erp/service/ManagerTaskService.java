@@ -9,7 +9,7 @@ public interface ManagerTaskService {
 
     Task save(Task t, int ownerId);
 
-    boolean delete(int taskId, int ownerId);
+    void delete(int taskId, int ownerId);
 
     Task get(int taskId, int ownerId);
 
