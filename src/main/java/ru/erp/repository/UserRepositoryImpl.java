@@ -3,7 +3,6 @@ package ru.erp.repository;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 import ru.erp.model.User;
 
@@ -21,27 +20,32 @@ public class UserRepositoryImpl implements UserRepository{
 
     public User save(User u) {
         Session session = sessionFactory.openSession();
-        Transaction tr = session.beginTransaction();
-        User user = (User)session.save(u);
-        tr.commit();
-        session.close();
-        return user;
+        session.beginTransaction();
+        if (u.isNew()){
+            session.persist(u);
+        }
+        else{
+            session.merge(u);
+        }
+        session.getTransaction().commit();
+        return u;
     }
 
     public boolean delete(int userId) {
         Session session = sessionFactory.openSession();
-        Transaction tr = session.beginTransaction();
+        session.beginTransaction();
         Query query = session.getNamedQuery(User.DELETE).setInteger("id", userId);
         boolean result = query.executeUpdate() > 0;
-        tr.commit();
+        session.getTransaction().commit();
         session.close();
         return result;
     }
 
     public User get(int userId) {
         Session session = sessionFactory.openSession();
-        Query query = session.getNamedQuery(User.GET_USER).setInteger("id", userId);
-        return (User)query.list().get(0);
+        User user = session.get(User.class, userId);
+        session.close();
+        return user;
     }
 
     public Collection<User> getAll() {

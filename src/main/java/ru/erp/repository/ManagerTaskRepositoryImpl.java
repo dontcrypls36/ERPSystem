@@ -1,17 +1,29 @@
 package ru.erp.repository;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.stereotype.Repository;
 import ru.erp.model.Task;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+
+@Repository
 public class ManagerTaskRepositoryImpl implements ManagerTaskRepository {
 
-    public void update(Task t) {
+    private SessionFactory sessionFactory;
 
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     public Task save(Task t, int ownerId) {
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        session.saveOrUpdate(t);
+        session.getTransaction().commit();
+        session.close();
         return null;
     }
 

@@ -10,7 +10,7 @@ public class BaseEntity {
     @Id
     @SequenceGenerator(name = "global_seq", sequenceName = "global_seq")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int id;
+    private Integer id;
 
     public BaseEntity() {
     }
@@ -25,5 +25,9 @@ public class BaseEntity {
 
     public BaseEntity(int id) {
         this.id = id;
+    }
+
+    public boolean isNew(){
+        return this.id == null;
     }
 }

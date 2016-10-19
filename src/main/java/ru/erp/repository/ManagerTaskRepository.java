@@ -8,8 +8,6 @@ import java.util.Collection;
 
 public interface ManagerTaskRepository {
 
-    void update(Task t);
-
     Task save(Task t, int ownerId);
 
     boolean delete(int taskId, int ownerId);

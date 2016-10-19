@@ -147,4 +147,5 @@ public class User extends NamedEntity {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
 }
