@@ -16,11 +16,11 @@ public interface ManagerTaskRepository {
 
     Collection<Task> getAll(int ownerId);
 
-    Collection<Task> getAllUserTask(int userId, int ownerId);
+    Collection<Task> getAllUserTask(int executorId, int ownerId);
 
     Collection<Task> getAllTaskByStatus(boolean complete, int ownerId);
 
-    Collection<Task> getAllTaskCreateBetween(LocalDateTime startTime, LocalDateTime endTime, int ownerId);
+    Collection<Task> getAllTaskCreateBetween(LocalDateTime startDate, LocalDateTime endDate, int ownerId);
 
-    Collection<Task> getAllTaskCompleteBetween(LocalDateTime startTime, LocalDateTime endTime, int ownerId);
+    Collection<Task> getAllTaskCompleteBetween(LocalDateTime startDate, LocalDateTime endDate, int ownerId);
 }

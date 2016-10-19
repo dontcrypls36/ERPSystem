@@ -4,9 +4,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import ru.erp.model.Task;
+import ru.erp.utils.TimeUtil;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
+import java.util.List;
 
 
 @Repository
@@ -19,39 +20,92 @@ public class ManagerTaskRepositoryImpl implements ManagerTaskRepository {
     }
 
     public Task save(Task t, int ownerId) {
+        if (!t.isNew() && get(t.getId(), ownerId) == null){
+            return null;
+        }
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        session.saveOrUpdate(t);
+        if (t.isNew()){
+            session.persist(t);
+        }
+        else{
+            session.merge(t);
+        }
         session.getTransaction().commit();
         session.close();
-        return null;
+        return t;
     }
 
     public boolean delete(int taskId, int ownerId) {
-        return false;
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        boolean result = session.getNamedQuery(Task.OWNER_DELETE)
+                .setInteger("taskId", taskId)
+                .setInteger("ownerId", ownerId)
+                .executeUpdate() > 0;
+        session.getTransaction().commit();
+        session.close();
+        return result;
     }
 
     public Task get(int taskId, int ownerId) {
-        return null;
+        Session session = sessionFactory.openSession();
+        Task task = (Task)session.getNamedQuery(Task.OWNER_GET)
+                .setInteger("taskId", taskId)
+                .setInteger("ownerId", ownerId)
+                .uniqueResult();
+        session.close();
+        return task;
     }
 
-    public Collection<Task> getAll(int ownerId) {
-        return null;
+    public List<Task> getAll(int ownerId) {
+        Session session = sessionFactory.openSession();
+        List<Task> tasks = session.getNamedQuery(Task.OWNER_GET_ALL)
+                .setInteger("ownerId", ownerId)
+                .list();
+        session.close();
+        return tasks;
     }
 
-    public Collection<Task> getAllUserTask(int userId, int ownerId) {
-        return null;
+    public List<Task> getAllUserTask(int executorId, int ownerId) {
+        Session session = sessionFactory.openSession();
+        List<Task> tasks = session.getNamedQuery(Task.OWNER_GET_ALL_USER_TASKS)
+                .setInteger("ownerId", ownerId)
+                .setInteger("executorId", executorId)
+                .list();
+        session.close();
+        return tasks;
     }
 
-    public Collection<Task> getAllTaskByStatus(boolean complete, int ownerId) {
-        return null;
+    public List<Task> getAllTaskByStatus(boolean complete, int ownerId) {
+        Session session = sessionFactory.openSession();
+        List<Task> tasks = session.getNamedQuery(Task.OWNER_GET_BY_STATUS)
+                .setBoolean("complete", complete)
+                .setInteger("ownerId", ownerId)
+                .list();
+        session.close();
+        return tasks;
     }
 
-    public Collection<Task> getAllTaskCreateBetween(LocalDateTime startTime, LocalDateTime endTime, int ownerId) {
-        return null;
+    public List<Task> getAllTaskCreateBetween(LocalDateTime startDate, LocalDateTime endDate, int ownerId) {
+        Session session = sessionFactory.openSession();
+        List<Task> tasks = session.getNamedQuery(Task.OWNER_GET_CREATE_BETWEEN)
+                .setDate("startDate", TimeUtil.LDTtoDate(startDate))
+                .setDate("endDate", TimeUtil.LDTtoDate(endDate))
+                .setInteger("ownerId", ownerId)
+                .list();
+        session.close();
+        return tasks;
     }
 
-    public Collection<Task> getAllTaskCompleteBetween(LocalDateTime startTime, LocalDateTime endTime, int ownerId) {
-        return null;
+    public List<Task> getAllTaskCompleteBetween(LocalDateTime startDate, LocalDateTime endDate, int ownerId) {
+        Session session = sessionFactory.openSession();
+        List<Task> tasks = session.getNamedQuery(Task.OWNER_GET_COMPLETE_BETWEEN)
+                .setDate("startDate", TimeUtil.LDTtoDate(startDate))
+                .setDate("endDate", TimeUtil.LDTtoDate(endDate))
+                .setInteger("ownerId", ownerId)
+                .list();
+        session.close();
+        return tasks;
     }
 }
