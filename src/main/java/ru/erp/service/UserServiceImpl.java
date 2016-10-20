@@ -7,6 +7,7 @@ import ru.erp.repository.UserRepository;
 import ru.erp.utils.Exceptions.ExceptionUtils;
 
 import java.util.Collection;
+import java.util.Objects;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -32,6 +33,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public Collection<User> getByDepartment(String department) {
+        Objects.requireNonNull(department);
         return repository.getByDepartment(department);
     }
 }
