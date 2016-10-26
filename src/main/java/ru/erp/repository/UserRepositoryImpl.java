@@ -3,6 +3,7 @@ package ru.erp.repository;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.erp.model.User;
 
@@ -12,6 +13,7 @@ import java.util.Collection;
 @Repository
 public class UserRepositoryImpl implements UserRepository{
 
+    @Autowired
     private SessionFactory sessionFactory;
 
     public void setSessionFactory(SessionFactory sessionFactory) {
@@ -56,7 +58,8 @@ public class UserRepositoryImpl implements UserRepository{
 
     public Collection<User> getByDepartment(String department) {
         Session session = sessionFactory.openSession();
-        Query query = session.getNamedQuery(User.GET_ALL_BY_DEPARTMENT).setString("department", department);
+        Query query = session.getNamedQuery(User.GET_ALL_BY_DEPARTMENT)
+                .setString("department", department);
         return query.list();
     }
 }

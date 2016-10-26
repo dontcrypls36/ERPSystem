@@ -5,11 +5,13 @@ import ru.erp.model.Task;
 import ru.erp.repository.ManagerTaskRepository;
 import ru.erp.utils.Exceptions.ExceptionUtils;
 
+import javax.faces.bean.ManagedBean;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
 
 @Service
+@ManagedBean(name = "managerTaskService")
 public class ManagerTaskServiceImpl implements ManagerTaskService {
 
     private ManagerTaskRepository repository;

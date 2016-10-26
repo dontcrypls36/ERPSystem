@@ -5,10 +5,12 @@ import ru.erp.model.Task;
 import ru.erp.repository.UserTaskRepository;
 import ru.erp.utils.Exceptions.ExceptionUtils;
 
+import javax.faces.bean.ManagedBean;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Service
+@ManagedBean(name = "userTaskService")
 public class UserTaskServiceImpl implements UserTaskService {
 
     private UserTaskRepository repository;

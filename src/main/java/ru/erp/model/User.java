@@ -4,7 +4,10 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.stereotype.Component;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -22,8 +25,11 @@ import java.util.Set;
                 query = "select u from User u where u.id=:id")
 })
 
+@Component
 @Entity
 @Table(name = "users")
+@ManagedBean(name = "user")
+@SessionScoped
 public class User extends NamedEntity {
 
     public static final String DELETE = "User.delete";
