@@ -3,12 +3,10 @@ package ru.erp.model;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.stereotype.Component;
 
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -18,19 +16,17 @@ import java.util.Set;
         @NamedQuery(name = User.DELETE,
                 query = "DELETE FROM User u WHERE u.id=:id"),
         @NamedQuery(name = User.GET_ALL_SORTED,
-                query = "SELECT u FROM User u ORDER BY u.surname ASC"),
+                query = "SELECT u FROM User u LEFT JOIN u.roles ORDER BY u.surname ASC"),
         @NamedQuery(name = User.GET_ALL_BY_DEPARTMENT,
-                query = "SELECT u from User u WHERE u.department=:department ORDER BY u.surname asc"),
+                query = "SELECT u from User u LEFT JOIN u.roles WHERE u.department=:department ORDER BY u.surname asc"),
         @NamedQuery(name = User.GET_USER,
-                query = "select u from User u where u.id=:id")
+                query = "select u from User u LEFT JOIN u.roles where u.id=:id")
 })
 
-@Component
-@Entity
-@Table(name = "users")
 @ManagedBean(name = "user")
-@SessionScoped
-public class User extends NamedEntity {
+@Entity
+@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")})
+public class User extends NamedEntity implements Serializable{
 
     public static final String DELETE = "User.delete";
     public static final String GET_ALL_SORTED = "User.getAll";
@@ -41,7 +37,7 @@ public class User extends NamedEntity {
     @NotBlank
     public String surname;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     @Email
     private String email;
 
@@ -61,9 +57,8 @@ public class User extends NamedEntity {
     @Length(min = 5)
     private String password;
 
-    @Column(name = "registered")
-    @NotEmpty
-    private Date registered;
+    @Column(name = "registered", columnDefinition = "timestamp default now()")
+    private Date registered = new Date();
 
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
@@ -79,15 +74,15 @@ public class User extends NamedEntity {
 
     }
 
-    public User(int id, String name, String surname, String department,
+    public User(int id, String name, String surname, String email, String department,
                 String position, String login, String password) {
         super(id, name);
         this.surname = surname;
+        this.email = email;
         this.department = department;
         this.position = position;
         this.login = login;
         this.password = password;
-        this.registered = new Date();
     }
 
     public String getDepartment() {

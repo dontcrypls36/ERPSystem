@@ -9,7 +9,7 @@ public class BaseEntity {
 
     @Id
     @SequenceGenerator(name = "global_seq", sequenceName = "global_seq")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "global_seq")
     private Integer id;
 
     public BaseEntity() {
